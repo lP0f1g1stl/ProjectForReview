@@ -49,7 +49,6 @@ public class ScoreHandler : MonoBehaviour
     private (int, int) ShowScores()
     {
         SaveScore();
-        _scoreText.gameObject.SetActive(false);
         LoadScore();
         var scores = (_score, _highScore);
         return scores;

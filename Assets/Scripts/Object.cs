@@ -23,11 +23,6 @@ public class Object : MonoBehaviour
         _particleSystem = GetComponent<ParticleSystem>();
     }
 
-    private void Start()
-    {
-        _isActive = true;
-        PlayerHealth.IsActive += IsActive;
-    }
     private void SetColor(Color ballColor) 
     {
         _spriteRenderer.color = ballColor;
@@ -47,6 +42,7 @@ public class Object : MonoBehaviour
         _damage = damage;
         _points = points;
         SetColor(color);
+        IsActive(true);
     }
 
     public void SetBallPosition(float rand)
@@ -67,9 +63,10 @@ public class Object : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        if (_isActive) 
+        if (Time.timeScale != 0 && _isActive)
         {
             IsClicked?.Invoke(_points);
+            IsActive(false);
             StartParticlesAndSoundsOnDestroy();
             StartCoroutine(Disable());
         }
@@ -79,10 +76,5 @@ public class Object : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         gameObject.SetActive(false);
-    }
-
-    private void OnDestroy()
-    {
-        PlayerHealth.IsActive -= IsActive;
     }
 }
