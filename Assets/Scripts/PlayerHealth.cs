@@ -20,12 +20,11 @@ public class PlayerHealth : MonoBehaviour
         if (collision.GetComponent<Object>()) 
         {
             _playerHealth -= collision.GetComponent<Object>().GetDamage();
-            collision.GetComponent<Object>().StartParticlesAndSoundsOnDestroy();
+            collision.GetComponent<Object>().CollisionWithBorder();
             CheckPlayerHealth();
             UpdatePlayerHealthText();
         }
     }
-
     private void CheckPlayerHealth() 
     {
        if(_playerHealth <= 0) 
