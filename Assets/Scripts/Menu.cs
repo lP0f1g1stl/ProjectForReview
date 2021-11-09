@@ -25,20 +25,17 @@ public class Menu : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("SampleScene");
     }
-
     public void ResumeGame() 
     {
         _showMenu.gameObject.SetActive(true);
         Time.timeScale = 1;
         _menu.gameObject.SetActive(false);
     }
-
     public void SetTexts(int scoreText, int highScoreText) 
     {
         _scoreText.text = "Score: " + scoreText.ToString();
         _highScoreText.text = "Highscore: " + highScoreText.ToString();
     }
-
     public void DeletePlayerdPrefData()
     {
         PlayerPrefs.DeleteAll();
@@ -51,7 +48,6 @@ public class Menu : MonoBehaviour
         _menu.gameObject.SetActive(true);
         GetScores();
     }
-
     public void GetScores() 
     {
         var scores = IsActive();
@@ -59,13 +55,11 @@ public class Menu : MonoBehaviour
         int highScoreText = scores.Item2;
         SetTexts(scoreText, highScoreText);
     }
-
     public void ShowMenuWithoutResume(bool isActive) 
     {
         _resume.gameObject.SetActive(isActive);
         ShowMenu();
     }
-
     private void OnDestroy()
     {
         PlayerHealth.IsActive -= ShowMenuWithoutResume;

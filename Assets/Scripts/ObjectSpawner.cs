@@ -4,21 +4,27 @@ using UnityEngine;
 
 public class ObjectSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _object;
-    [SerializeField] private float _spawnTime;
-    [SerializeField] private Vector2 _ballVelocity;
-    [SerializeField] private GameObject[] _objects;
-    [SerializeField] private SpawnData _spawnData;
+    [SerializeField] private GameObject _object; // префаб нужного объекта(шар/звезда и т.д)
+    [SerializeField] private Vector2 _objectVelocity;
+    [SerializeField] private GameObject[] _objects; // пулл объектов
+    [SerializeField] private SpawnData _spawnData; // создаете SO с входными данными(цвет, урон, кол-во очков) и цепляете сюда
 
-    private int _curBall;
+    private Vector2 _curObjectVelocity;
+    private float _spawnTime;
+    private int _curObjectId;
 
     private void Start()
     {
-        CreateBalls();
+        _curObjectVelocity = _objectVelocity;
+        SetSpawnTimeBySpeedAndQuantity();
+        CreateObjects();
         StartGame();
     }
-
-    private void CreateBalls() 
+    private void SetSpawnTimeBySpeedAndQuantity()
+    {
+        _spawnTime = (5 / -_curObjectVelocity.y + 3) / _objects.Length; // немного магических цифр (5 - расстоние, 3 - время анимации с запасом)
+    }
+    private void CreateObjects() 
     {
         for(int i = 0; i < _objects.Length; i++) 
         {
@@ -26,7 +32,6 @@ public class ObjectSpawner : MonoBehaviour
             _objects[i].SetActive(false);
         }
     }
-
     private void StartGame() 
     {
         StartCoroutine(SpawnTimer());
@@ -35,36 +40,30 @@ public class ObjectSpawner : MonoBehaviour
     {
         while (true)
         {
-            LaunchBall(_curBall);
-            _curBall++;
-            if (_curBall == _objects.Length) _curBall = 0;
+            LaunchBall(_curObjectId);
+            _curObjectId++;
+            if (_curObjectId == _objects.Length) _curObjectId = 0;
             IncreaseGameSpeed();
             yield return new WaitForSeconds(_spawnTime);
         }
     }
-
     private void IncreaseGameSpeed() 
     {
-        ChangeSpawnTime();
-        ChangeBallVelocity();
+        ChangeObjectVelocity();
+        SetSpawnTimeBySpeedAndQuantity();
     }
     private void LaunchBall(int i) 
     {
         float posY = Random.Range(-3f, 3f);
-        _objects[i].GetComponent<Object>().SetBallPosition(posY);
+        _objects[i].GetComponent<Object>().SetObjectPosition(posY);
         _objects[i].SetActive(true);
-        _objects[i].GetComponent<Object>().SetVelocity(_ballVelocity);
+        _objects[i].GetComponent<Object>().SetVelocity(_curObjectVelocity);
         int rand = Random.Range(0, _spawnData.GetDataArrayLenght());
         var data = _spawnData.GetData(rand);
-        _objects[i].GetComponent<Object>().SetBallData(data.Item1, data.Item2, data.Item3);
-
+        _objects[i].GetComponent<Object>().SetObjectData(data.Item1, data.Item2, data.Item3);
     }
-    private void ChangeBallVelocity()
+    private void ChangeObjectVelocity()
     {
-        _ballVelocity *= 1.01f;
-    }
-    private void ChangeSpawnTime()
-    {
-        _spawnTime *= 0.99f;
+        _curObjectVelocity += _objectVelocity * 0.01f;
     }
 }

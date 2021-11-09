@@ -769,8 +769,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _object: {fileID: 7565450863401901312, guid: 2f298f3f0d2b35a4e829abbc30eef56a, type: 3}
-  _spawnTime: 1
-  _ballVelocity: {x: 0, y: -1}
+  _objectVelocity: {x: 0, y: -1}
   _objects:
   - {fileID: 0}
   - {fileID: 0}

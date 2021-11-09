@@ -22,13 +22,11 @@ public class Object : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _particleSystem = GetComponent<ParticleSystem>();
     }
-
     private void SetColor(Color ballColor) 
     {
         _spriteRenderer.color = ballColor;
         _particleSystem.startColor = ballColor;
     }
-
     public int GetDamage() 
     {
         return _damage;
@@ -37,24 +35,26 @@ public class Object : MonoBehaviour
     {
         _rb.velocity = velocity;
     }
-    public void SetBallData(Color color, int damage,int points) 
+    public void SetObjectData(Color color, int damage,int points) 
     {
         _damage = damage;
         _points = points;
         SetColor(color);
         IsActive(true);
     }
-
-    public void SetBallPosition(float rand)
+    public void SetObjectPosition(float rand)
     {
         gameObject.transform.position = new Vector2(rand, 3);
     }
-
-    public void StartParticlesAndSoundsOnDestroy() 
+    public void StartParticlesOnDestroy() 
     {
         _particleSystem.Play();
         _spriteRenderer.color = Color.clear;
         _rb.velocity = new Vector2(0, 0);
+    }
+    public void CollisionWithBorder() 
+    {
+        StartParticlesOnDestroy();
         IsClicked?.Invoke(0);
     }
     private void IsActive(bool isActive) 
@@ -67,11 +67,10 @@ public class Object : MonoBehaviour
         {
             IsClicked?.Invoke(_points);
             IsActive(false);
-            StartParticlesAndSoundsOnDestroy();
+            StartParticlesOnDestroy();
             StartCoroutine(Disable());
         }
     }
-
     private IEnumerator Disable() 
     {
         yield return new WaitForSeconds(2);

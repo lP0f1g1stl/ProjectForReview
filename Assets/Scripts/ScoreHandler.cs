@@ -19,33 +19,27 @@ public class ScoreHandler : MonoBehaviour
         ChangeScoreText();
         LoadScore();
     }
-
     private void ChangeScore(int points) 
     {
         _score += points;
         ChangeScoreText();
     }
-
     private void ChangeScoreText() 
     {
         _scoreText.text = "Score: " + _score.ToString();
     }
-
     private void IsActive(bool isActive) 
     {
         SaveScore();
     }
-
     private void SaveScore() 
     {
         if(_score > _highScore) PlayerPrefs.SetInt("HighScore", _score);
     }
-
     private void LoadScore() 
     {
         _highScore = PlayerPrefs.GetInt("HighScore");
     }
-
     private (int, int) ShowScores()
     {
         SaveScore();
@@ -53,7 +47,6 @@ public class ScoreHandler : MonoBehaviour
         var scores = (_score, _highScore);
         return scores;
     }
-
     private void OnDestroy()
     {
         Object.IsClicked -= ChangeScore;
